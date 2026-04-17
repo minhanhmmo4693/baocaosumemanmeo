@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thanh toán</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f5f5f5;
+  text-align: center;
+}
+.box {
+  max-width: 400px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 30px;
+}
+.qr {
+  width: 250px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>Quét QR để thanh toán</h2>
+
+  <img id="qr" class="qr" src="">
+
+  <p><b>Số tiền:</b> <span id="amount"></span></p>
+  <p><b>Nội dung:</b> <span id="note"></span></p>
+
+  <p style="color:red;">Sau khi chuyển khoản, shop sẽ liên hệ xác nhận</p>
+</div>
+
+<script>
+// Lấy dữ liệu từ URL
+let params = new URLSearchParams(window.location.search);
+
+let name = params.get("name");
+let phone = params.get("phone");
+let total = params.get("total");
+
+// Nội dung chuyển khoản
+let note = phone;
+
+// Hiển thị
+document.getElementById("amount").innerText =
+  parseInt(total).toLocaleString() + "đ";
+
+document.getElementById("note").innerText = note;
+
+// Tạo QR VietQR
+let qr = `https://img.vietqr.io/image/MB-0936018520-compact2.png?amount=${total}&addInfo=${note}`;
+
+document.getElementById("qr").src = qr;
+</script>
+
+</body>
+</html>
