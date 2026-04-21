@@ -155,8 +155,14 @@ function changeQty(id, val){
 
 function sendData(){
 
-  let name = document.getElementById("name").value;
-  let phone = document.getElementById("phone").value;
+  let formData = new FormData();
+
+  formData.append("name", document.getElementById("name").value);
+  formData.append("phone", document.getElementById("phone").value);
+  formData.append("sp1", getQty("sp1"));
+  formData.append("sp2", getQty("sp2"));
+  formData.append("sp3", getQty("sp3"));
+  formData.append("sp4", getQty("sp4"));
 
   let total =
     getQty("sp1")*prices.sp1 +
@@ -164,33 +170,17 @@ function sendData(){
     getQty("sp3")*prices.sp3 +
     getQty("sp4")*prices.sp4;
 
-  let data = {
-    name: name,
-    phone: phone,
-    sp1: getQty("sp1"),
-    sp2: getQty("sp2"),
-    sp3: getQty("sp3"),
-    sp4: getQty("sp4"),
-    total: total
-  };
-
-  console.log(data); // DEBUG
+  formData.append("total", total);
 
   fetch("https://script.google.com/macros/s/AKfycbzB_WsixHBrlF7HIv7T0DwEmsmGuWfTD6Hwi9b-XbchY6-MvSjB9_MCF1cTkgzluwsg/exec", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  });
+    body: formData
+  })
+  .then(res => res.text())
+  .then(res => console.log("OK:", res))
+  .catch(err => console.log("LỖI:", err));
 
-  let params = new URLSearchParams({
-    name: name,
-    phone: phone,
-    total: total
-  });
-
-  window.location.href = "pay.html?" + params.toString();
+  window.location.href = "pay.html?total=" + total;
 }
 </script>
 
